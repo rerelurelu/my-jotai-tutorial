@@ -1,9 +1,10 @@
-import { countAtom } from '@/atom/countAtom';
+import { countAtom, doubleCountAtom } from '@/atom/countAtom';
 import { Box, Button } from '@chakra-ui/react';
 import { useAtom } from 'jotai';
 
 export default function Home() {
   const [count, setCount] = useAtom(countAtom);
+  const doubleCount = useAtom(doubleCountAtom);
   const increment = () => {
     setCount((value) => value + 1);
   };
@@ -21,7 +22,9 @@ export default function Home() {
       flexDir={'column'}
       gap={4}
     >
-      <p>{count}</p>
+      <p>
+        count: {count}, double: {doubleCount}
+      </p>
       <Button onClick={increment}>+</Button>
       <Button onClick={reset}>Reset</Button>
     </Box>
