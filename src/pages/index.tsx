@@ -1,17 +1,51 @@
-import { countAtom, doubleCountAtom } from '@/atom/countAtom';
-import { Box, Button } from '@chakra-ui/react';
-import { useAtom } from 'jotai';
+import { loadableAtom, queryAtom } from '@/atom/queryAtom';
+import { Box, Button, FormControl, FormLabel, Input, Spinner } from '@chakra-ui/react';
+import { useAtomValue, useSetAtom } from 'jotai';
+import Image from 'next/image';
+import { ChangeEvent, FC, useState } from 'react';
+
+const Contents: FC = () => {
+  const { state, data } = useAtomValue(loadableAtom);
+
+  if (state === 'loading') {
+    return <Spinner></Spinner>;
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  return (
+    <>
+      <Image src={data.img} alt={data.name} width={300} height={300} />
+      <p>{data.name}</p>
+    </>
+  );
+};
+
+const SearchForm: FC = () => {
+  const [inputNumber, setInputNumber] = useState<number>(0);
+  const setQuery = useSetAtom(queryAtom);
+  const search = () => {
+    setQuery(inputNumber);
+  };
+
+  const changeNumber = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputNumber(Number(e.target.value));
+  };
+
+  return (
+    <>
+      <FormControl>
+        <FormLabel>No.</FormLabel>
+        <Input type="number" min={1} onChange={changeNumber} />
+      </FormControl>
+      <Button onClick={search}>Search</Button>
+    </>
+  );
+};
 
 export default function Home() {
-  const [count, setCount] = useAtom(countAtom);
-  const doubleCount = useAtom(doubleCountAtom);
-  const increment = () => {
-    setCount((value) => value + 1);
-  };
-  const reset = () => {
-    setCount(0);
-  };
-
   return (
     <Box
       w="100vw"
@@ -22,11 +56,10 @@ export default function Home() {
       flexDir={'column'}
       gap={4}
     >
-      <p>
-        count: {count}, double: {doubleCount}
-      </p>
-      <Button onClick={increment}>+</Button>
-      <Button onClick={reset}>Reset</Button>
+      <Box w="80%">
+        <Contents />
+        <SearchForm />
+      </Box>
     </Box>
   );
 }
