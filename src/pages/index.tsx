@@ -1,5 +1,5 @@
 import { loadableAtom, queryAtom } from '@/atom/queryAtom';
-import { Box, Button, FormControl, FormLabel, Input, Spinner, VStack } from '@chakra-ui/react';
+import { Box, Button, FormControl, Input, Spinner, VStack } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import Image from 'next/image';
 import { ChangeEvent, FC, useState } from 'react';
@@ -9,9 +9,9 @@ const Contents: FC = () => {
 
   if (state === 'loading') {
     return (
-      <VStack h={'224px'} w={'224px'}>
+      <Box h={'224px'} w={'224px'} display={'grid'} placeItems={'center'}>
         <Spinner size={'xl'} />
-      </VStack>
+      </Box>
     );
   }
 
@@ -22,7 +22,7 @@ const Contents: FC = () => {
   return (
     <VStack>
       <Image src={data.img} alt={data.name} width={200} height={200} />
-      <p>{data.name}</p>
+      <div>{data.name}</div>
     </VStack>
   );
 };
