@@ -1,5 +1,5 @@
 import { loadableAtom, queryAtom } from '@/atom/queryAtom';
-import { Box, Button, FormControl, FormLabel, Input, Spinner } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Input, Spinner, VStack } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import Image from 'next/image';
 import { ChangeEvent, FC, useState } from 'react';
@@ -8,7 +8,11 @@ const Contents: FC = () => {
   const { state, data } = useAtomValue(loadableAtom);
 
   if (state === 'loading') {
-    return <Spinner></Spinner>;
+    return (
+      <VStack h={'224px'} w={'224px'}>
+        <Spinner size={'xl'} />
+      </VStack>
+    );
   }
 
   if (!data) {
@@ -16,10 +20,10 @@ const Contents: FC = () => {
   }
 
   return (
-    <>
-      <Image src={data.img} alt={data.name} width={300} height={300} />
+    <VStack>
+      <Image src={data.img} alt={data.name} width={200} height={200} />
       <p>{data.name}</p>
-    </>
+    </VStack>
   );
 };
 
@@ -35,31 +39,28 @@ const SearchForm: FC = () => {
   };
 
   return (
-    <>
+    <VStack w={'400px'} gap={4}>
       <FormControl>
-        <FormLabel>No.</FormLabel>
-        <Input type="number" min={1} onChange={changeNumber} />
+        <Input
+          type="number"
+          min={1}
+          onChange={changeNumber}
+          placeholder="No."
+          onKeyDown={(e) => e.code === 'Enter' && search()}
+        />
       </FormControl>
-      <Button onClick={search}>Search</Button>
-    </>
+      <Button type="button" onClick={search}>
+        Search
+      </Button>
+    </VStack>
   );
 };
 
 export default function Home() {
   return (
-    <Box
-      w="100vw"
-      pt={10}
-      display={'flex'}
-      justifyContent={'center'}
-      alignItems={'center'}
-      flexDir={'column'}
-      gap={4}
-    >
-      <Box w="80%">
-        <Contents />
-        <SearchForm />
-      </Box>
-    </Box>
+    <VStack w="100%" pt={10} gap={4}>
+      <Contents />
+      <SearchForm />
+    </VStack>
   );
 }
